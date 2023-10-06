@@ -13,22 +13,22 @@ const tourSchema = new mongoose.Schema(
       required: [true, 'A tour must have a name'],
       unique: true,
       trim: true,
-      maxlength: [40, 'A tour name must have less or equal then 40 characters'],
-      minlength: [10, 'A tour name must have more or euqal then 10 characters'],
+      // maxlength: [40, 'A tour name must have less or equal then 40 characters'],
+      // minlength: [10, 'A tour name must have more or euqal then 10 characters'],
       // validate: [validator.isAlpha, 'Tour name must only contain characters'],
     },
     slug: String,
     duration: {
       type: Number,
-      required: [true, 'A tour must have a duration'],
+      // required: [true, 'A tour must have a duration'],
     },
     maxGroupSize: {
       type: Number,
-      require: [true, 'A tour must have a group size'],
+      // require: [true, 'A tour must have a group size'],
     },
     difficulty: {
       type: String,
-      require: [true, 'A tour must have a difficulty'],
+      // require: [true, 'A tour must have a difficulty'],
       enum: {
         values: ['easy', 'medium', 'difficult'],
         message: 'Difficulty is either: easy, medium, difficult',
@@ -47,7 +47,7 @@ const tourSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      required: [true, 'A tour must have a price'],
+      // required: [true, 'A tour must have a price'],
     },
     priceDiscount: {
       type: Number,
@@ -61,15 +61,15 @@ const tourSchema = new mongoose.Schema(
     summary: {
       type: String,
       trim: true,
-      required: [true, 'A tour must have a description'],
     },
     description: {
       type: String,
       trim: true,
+      // required: [true, 'A tour must have a description'],
     },
     imageCover: {
       type: String,
-      require: [true, 'A  tour must have a cover image'],
+      // require: [true, 'A  tour must have a cover image'],
     },
     images: {
       type: [String],
@@ -81,7 +81,7 @@ const tourSchema = new mongoose.Schema(
     },
     startDates: {
       type: [Date],
-      require: true,
+      // require: true,
     },
     secretTour: {
       type: Boolean,

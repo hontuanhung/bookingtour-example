@@ -56,7 +56,11 @@ exports.signup = catchAsync(async (req, res, next) => {
   validator.validateData(req.body, {
     name: { required: true, type: 'string' },
     email: { required: true, type: 'string', isEmail: true },
-    password: { required: true, type: 'string', minlength: 8 },
+    password: {
+      required: true,
+      type: 'string',
+      minlength: [8, 'Your password must be at least 8 characters long.'],
+    },
     passwordConfirm: { required: true, type: 'string' },
     photo: { type: 'string' },
     role: { type: 'string', enum: ['user', 'guide', 'lead-guide', 'admin'] },
@@ -97,7 +101,11 @@ exports.signup = catchAsync(async (req, res, next) => {
 exports.login = catchAsync(async (req, res, next) => {
   validator.validateData(req.body, {
     email: { required: true, type: 'string', isEmail: true },
-    password: { required: true, type: 'string', minlength: 8 },
+    password: {
+      required: true,
+      type: 'string',
+      minlength: [8, 'Your password must be at least 8 characters long.'],
+    },
   });
 
   const { email, password } = req.body; // ~ email = req.body.email

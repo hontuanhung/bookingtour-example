@@ -2,6 +2,9 @@
 
 class Validatetor {
   static isValidType(data, type) {
+    if (Array.isArray(type)) {
+      return data.every((el) => typeof el === type[0]);
+    }
     return type && typeof data === type;
   }
 

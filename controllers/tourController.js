@@ -6,6 +6,7 @@ const AppError = require('../utils/appError');
 const Tour = require('./../models/tourModel');
 const catchAsync = require('./../utils/catchAsync');
 const factory = require('./handlerFactory');
+const validator = require('../utils/validator');
 
 const multerStorage = multer.memoryStorage();
 
@@ -31,7 +32,7 @@ exports.uploadTourImgs = upload.fields([
 ]);
 
 exports.resizeTourImages = catchAsync(async (req, res, next) => {
-  if (!req.files.imageCover || !req.files.images) return next();
+  if (!req.files || !req.files.imageCover || !req.files.images) return next();
   // console.log(req.files);
   req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
   await sharp(req.files.imageCover[0].buffer)
@@ -63,6 +64,79 @@ exports.aliasTopTours = (req, res, next) => {
   req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
   next();
 };
+
+exports.validateBeforeCreateTour = catchAsync(async (req, res, next) => {
+  validator.validateData(req.body, {
+    name: {
+      required: true,
+      type: 'string',
+      maxlength: [40, 'A tour name must have less or equal then 40 characters'],
+      minlength: [10, 'A tour name must have more or euqal then 10 characters'],
+    },
+    duration: { required: true, type: 'number' },
+    maxGroupSize: {
+      required: true,
+      type: 'number',
+    },
+    difficulty: {
+      required: true,
+      type: 'string',
+      enum: ['easy', 'medium', 'difficult'],
+    },
+    price: { required: true, type: 'number' },
+    priceDiscount: { type: 'number' },
+    summary: { type: 'string' },
+    description: { required: true, type: 'string' },
+    imageCover: { required: true, type: 'string' },
+    images: { required: true, type: ['string'] },
+    startDates: { required: true },
+    secretTour: {
+      type: 'boolean',
+    },
+    startLocation: {
+      type: 'string',
+    },
+    locations: {
+      type: 'string',
+    },
+  });
+  next();
+});
+
+exports.validateBeforeUpdateTour = catchAsync(async (req, res, next) => {
+  validator.validateData(req.body, {
+    name: {
+      type: 'string',
+      maxlength: [40, 'A tour name must have less or equal then 40 characters'],
+      minlength: [10, 'A tour name must have more or euqal then 10 characters'],
+    },
+    duration: { type: 'number' },
+    maxGroupSize: {
+      type: 'number',
+    },
+    difficulty: {
+      type: 'string',
+      enum: ['easy', 'medium', 'difficult'],
+    },
+    price: { type: 'number' },
+    priceDiscount: { type: 'number' },
+    summary: { type: 'string' },
+    description: { type: 'string' },
+    imageCover: { type: 'string' },
+    images: { type: ['string'] },
+    startDates: {},
+    secretTour: {
+      type: 'boolean',
+    },
+    startLocation: {
+      type: 'string',
+    },
+    locations: {
+      type: 'string',
+    },
+  });
+  next();
+});
 
 // CRUD
 exports.getAllTours = factory.getAll(Tour);

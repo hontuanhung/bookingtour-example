@@ -1,5 +1,6 @@
 const express = require('express');
 const authController = require('./../controllers/authController');
+const reviewController = require('../controllers/reviewController');
 const reviewRouter = require('../routes/reviewRoutes');
 const {
   uploadTourImgs,
@@ -10,8 +11,10 @@ const {
   getTourStats,
   aliasTopTours,
   getAllTours,
+  validateBeforeCreateTour,
   createTour,
   getTour,
+  validateBeforeUpdateTour,
   updateTour,
   deleteTour,
 } = require(`./../controllers/tourController`);
@@ -23,6 +26,15 @@ const router = express.Router();
 //ROUTES
 
 router.use('/:tourId/reviews', reviewRouter);
+
+router
+  .route('/:tourId/reviews', reviewRouter)
+  .post(
+    authController.restrictTo('user', 'admin'),
+    reviewController.validateBeforeCreateReview,
+    reviewController.setTourUserIds,
+    reviewController.creatReview
+  );
 
 router.route('/tour-stats').get(getTourStats);
 router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
@@ -46,6 +58,7 @@ router
   .post(
     authController.protect,
     authController.restrictTo('admin', 'lead-guide'),
+    validateBeforeCreateTour,
     createTour
   );
 router
@@ -54,6 +67,7 @@ router
   .patch(
     authController.protect,
     authController.restrictTo('admin', 'lead-guide'),
+    validateBeforeUpdateTour,
     uploadTourImgs,
     resizeTourImages,
     updateTour
