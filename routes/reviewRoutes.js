@@ -11,7 +11,7 @@ router
   .get(reviewController.getAllReviews)
   .post(
     authController.restrictTo('user', 'admin'),
-    reviewController.validateBeforeCreateReview,
+    reviewController.validateBeforeReview,
     reviewController.setTourUserIds,
     reviewController.creatReview
   );
@@ -21,7 +21,7 @@ router
   .get(reviewController.getReview)
   .patch(
     authController.restrictTo('user', 'admin'),
-    validateBeforeReview,
+    reviewController.validateBeforeReview,
     reviewController.updateReview
   )
   .delete(
